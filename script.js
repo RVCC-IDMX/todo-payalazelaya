@@ -15,7 +15,7 @@ const clearCompleteTasksButton = document.querySelector(
   '[data-clear-complete-tasks-button]'
 );
 
-const LOCAL_STORAGE_LIST_KEY = 'task.lists';
+const LOCAL_STORAGE_LIST_KEY = 'task.Lists';
 const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.selectedListId';
 let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || [];
 let selectedListId = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY);
@@ -54,7 +54,7 @@ deleteListButton.addEventListener('click', (e) => {
 newListForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const listName = newListInput.value;
-  if (listName === null || listName === '') return;
+  if (listName == null || listName === '') return;
   const list = createList(listName);
   newListInput.value = null;
   lists.push(list);
@@ -64,28 +64,20 @@ newListForm.addEventListener('submit', (e) => {
 newTaskForm.addEventListener('submit', (e) => {
   e.preventDefault();
   const taskName = newTaskInput.value;
-  if (taskName === null || taskName === '') return;
+  if (taskName == null || taskName === '') return;
   const task = createTask(taskName);
-  newListInput.value = null;
+  newTaskInput.value = null;
   const selectedList = lists.find((list) => list.id === selectedListId);
   selectedList.tasks.push(task);
   saveAndRender();
 });
 
 function createList(name) {
-  return {
-    id: Date.now().toString(),
-    name: name,
-    tasks: [],
-  };
+  return { id: Date.now().toString(), name: name, tasks: [] };
 }
 
 function createTask(name) {
-  return {
-    id: Date.now().toString(),
-    name: name,
-    complete: false,
-  };
+  return { id: Date.now().toString(), name: name, complete: false };
 }
 
 function saveAndRender() {
@@ -102,7 +94,6 @@ function render() {
   clearElement(listsContainer);
   renderLists();
   const selectedList = lists.find((list) => list.id === selectedListId);
-
   if (selectedListId == null) {
     listDisplayContainer.style.display = 'none';
   } else {
@@ -116,7 +107,7 @@ function render() {
 
 function renderTasks(selectedList) {
   selectedList.tasks.forEach((task) => {
-    const taskElement = document.importantNode(taskTemplate.content, true);
+    const taskElement = document.importNode(taskTemplate.content, true);
     const checkbox = taskElement.querySelector('input');
     checkbox.id = task.id;
     checkbox.checked = task.complete;
@@ -131,7 +122,7 @@ function renderTaskCount(selectedList) {
   const incompleteTaskCount = selectedList.tasks.filter(
     (task) => !task.complete
   ).length;
-  const taskString = incompleteTaskCount === 1 ? 'task' : 'tasks';
+  const taskString = incompleteTaskCount === 1 ? 'task' : 'task';
   listCountElement.innerText = `${incompleteTaskCount} ${taskString} remaining`;
 }
 
